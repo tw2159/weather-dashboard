@@ -13,7 +13,6 @@ h2 {
   margin: 10px 0;
 }
 h3 {
-  height: 50px;
   line-height: 50px;
 }
 .button {
@@ -63,7 +62,7 @@ header {
 
 /* --- Current Weather -------------------------------- */
 
-#currentWeatherContainer {
+#currentWeather {
   margin: 10px auto;
   padding: 0 15px;
   width: calc(100% - 30px);
@@ -101,8 +100,63 @@ header {
   background-color: #998ffc;
 }
 
+/* --- Five Day Forecast ------------------------------ */
+
+#fiveDayForecast {
+  margin: 10px auto;
+  padding: 0 15px;
+  width: calc(100% - 30px);
+}
+#fiveDayCardsList {
+  display: flex;
+  flex-direction: row;
+  list-style-type: none;
+  padding: 0;
+}
+.fiveDayCardItem {
+  background-color: #6c56ac;
+  border-color: #6c56ac;
+  box-sizing: border-box;
+  color: #fff;
+  display: inline-block;
+  margin: 0 20px 0 0;
+  padding: 12px;
+  text-align: center;
+  width: calc((100% - 80px) / 5);
+}
+.fiveDayCardItem:last-child {
+  margin: 0;
+}
+.fiveDayCardItem:hover {
+  background-color: #4c3c7a;
+  border-color: #4c3c7a;
+}
+.fiveDayCardItem .description {
+  display: block;
+  font-weight: 700;
+  position: relative;
+  top: -16px;
+}
+.fiveDayCardItem .temperature {
+  font-size: 50px;
+}
+
 /* --- Media Queries ---------------------------------- */
 
-@media screen and (max-width: 575px) {
-
+@media screen and (max-width: 1199px) {
+  h4 {
+    font-size: 20px;
+  }
+}
+@media screen and (max-width: 1023px) {
+  h4 {
+    font-size: 30px;
+  }
+  #fiveDayCardsList {
+    flex-direction: column;
+  }
+  .fiveDayCardItem {
+    margin: 0 0 20px 0;
+    width: 100%;
+  }
 }

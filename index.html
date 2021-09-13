@@ -48,22 +48,53 @@
         <div class="col-sm-10 col-md-9 col-lg-10">
           <!-- Row 1: Current Weather -->
           <div class="row">
-            <div id="currentWeatherContainer" class="card hide">
+            <div id="currentWeather" class="card hide">
               <div class="card-body">
                 <div id="currentWeatherHeader">
                   <h3 id="cityAndDate"></h3>
                   <div id="icon"></div>
                 </div>
                 <div id="temperature"></div>
-                <div id="humidity"></div>
                 <div id="windSpeed"></div>
+                <div id="humidity"></div>
                 <div id="uvIndex"></div>
               </div>
             </div>
           </div>
           <!-- End of Row 1: Current Weather -->
+          <!-- Row 2: 5-Day Forecast -->
+          <div class="row">
+            <div id="fiveDayForecast" class="card hide">
+              <div class="card-body">
+                <h3>5-Day Forecast</h3>
+                <div id="fiveDayCards">
+                  <ul id="fiveDayCardsList"></ul>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- End of Row 2: 5-Day Forecast -->
         </div>
         <!-- End of Column 2: Current Weather & 5-Day Forecast -->
+      </div>
+    </div>
+
+    <div id="errorModal" class="modal" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Error</h5>
+            <button type="button" id="exitButton1" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <p>The input is invalid.  Please enter the name of a city and try again!</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" id="exitButton2" class="btn button" data-dismiss="modal">Close</button>
+          </div>
+        </div>
       </div>
     </div>
 
