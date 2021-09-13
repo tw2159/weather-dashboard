@@ -1,9 +1,6 @@
-// References to ID elements
-var searchButton = document.getElementById("searchButton");
-
-// Other variables
+// Variables
 var searchHistory = JSON.parse(localStorage.getItem("searchHistory")) || [];
-
+var apiKey = "0330340fdd1428ea8d2c085e2aefb94d";
 
 function search() {
   var cityInput = document.getElementById("cityInput");
@@ -11,14 +8,7 @@ function search() {
 
   // Check to see if there's any input first
   if(currentCity.length != 0) {
-
-    // TO DO:
-    // Before adding input to localstorage, we must:
-    // 1. Check to see if the input is an actual city (check weather API to verify if there's any data for that place)
-    // 2. Check to see if the city has been added already so we don't have duplicates
-    searchHistory.push(currentCity);
-    localStorage.setItem("searchHistory", JSON.stringify(searchHistory));
-    showHistory();
+    getWeather(currentCity);
   }
 }
 
@@ -35,13 +25,21 @@ function showHistory() {
     // Display the city name
     listItem.textContent = searchHistory[i];
 
-    // Add the appropriate classes for styling
+    // Set the city name as a data attribute
+    listItem.setAttribute("data-city", searchHistory[i]);
+
+    // Add class for styling
     listItem.classList.add("list-group-item");
 
     // If the city is the current search, add the "active" class
     if(i == searchHistory.length - 1) {
       listItem.classList.add("active");
     }
+
+    // Get the weather data of city if item is clicked
+    listItem.addEventListener("click", function() {
+      getWeather((this).getAttribute("data-city"));
+    });
 
     cityList.prepend(listItem);
   }
@@ -73,7 +71,97 @@ function clearHistory() {
   }
 }
 
+function processCityName(cityName) {
+  // Ensure that the first letter of each word is always capitalized
+  return cityName.replace(/\w\S*/g, function(text) {
+    return text.charAt(0).toUpperCase() + text.substr(1).toLowerCase();
+  });
+}
+
+function convertTemperature(temp) {
+  // Converts temperature from Kelvin to Fahrenheit
+  return parseInt((temp - 273.15) * (9/5) + 32);
+}
+
+function getUVI(lat, lon) {
+  var queryURL = "https://api.openweathermap.org/data/2.5/onecall?lat=" + lat + "&lon=" + lon + "&appid=" + apiKey;
+
+  $.ajax({
+    url: queryURL,
+    method: "GET"
+  }).then(function(response) {
+
+    var uvIndex = response.current.uvi;
+    var uvDisplay = document.getElementById("uvDisplay");
+    var colorClass = "";
+
+    uvDisplay.textContent = uvIndex;
+
+    // Determine the level of the UV index 
+    if(uvIndex >= 0 && uvIndex < 3) {
+      colorClass = "uv-low";
+    }
+    else if(uvIndex >= 3 && uvIndex < 6) {
+      colorClass = "uv-medium";
+    }
+    else if(uvIndex >= 6 && uvIndex < 8) {
+      colorClass = "uv-high";
+    }
+    else if(uvIndex > 8 && uvIndex < 11) {
+      colorClass = "uv-veryHigh";
+    }
+    else {
+      colorClass = "uv-extremelyHigh";
+    }
+
+    // Add the class based on the UV index level
+    uvDisplay.classList.add(colorClass);
+
+  });
+}
+
+function getWeather(cityName) {
+  var date = new Date();
+  var currentDate = "(" + date.getMonth() + "/" + date.getDate() + "/" + date.getFullYear() + ")";
+  var queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + cityName + "&appid=" + apiKey
+
+  $.ajax({
+    url: queryURL,
+    method: "GET"
+  }).done(function(response) {
+
+    // Check to see search history already includes the current city and delete it from the searchHistory array if so
+    if(searchHistory.includes(processCityName(cityName))) {
+      var index = searchHistory.indexOf(processCityName(cityName));
+      searchHistory.splice(index, 1);
+    }
+
+    // Add the current city to the searchHistory array and then add the searchHistory array to localStorage
+    searchHistory.push(processCityName(cityName));
+    localStorage.setItem("searchHistory", JSON.stringify(searchHistory));
+
+    // Generate today's weather report
+    document.getElementById("currentWeatherContainer").classList.remove("hide");
+    document.getElementById("cityAndDate").innerHTML = response.name + " " + currentDate;
+    document.getElementById("icon").innerHTML = "<img src=\"http://openweathermap.org/img/wn/" + response.weather[0].icon + "@2x.png\" alt=\"weather-icon\">";
+    document.getElementById("temperature").innerHTML = "Temperature: " + convertTemperature(response.main.temp) + "&deg;";
+    document.getElementById("humidity").innerHTML = "Humidity: " + response.main.humidity + "%";
+    document.getElementById("windSpeed").innerHTML = "Wind Speed: " + (response.wind.speed * 2.2369362921).toFixed(2) + " MPH";
+    document.getElementById("uvIndex").innerHTML = "UV Index: <span id=\"uvDisplay\"></span>";
+
+    getUVI(response.coord.lat, response.coord.lon);
+
+    // console.log(searchHistory);
+    // console.log(response);
+
+    showHistory();
+
+  }).fail(function() {
+    console.log("FAIL!!!")
+  });
+}
+
 showHistory();
 
 // Add EventListeners to Buttons
-searchButton.addEventListener("click", search);
+document.getElementById("searchButton").addEventListener("click", search);
