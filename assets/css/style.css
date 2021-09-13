@@ -1,28 +1,61 @@
 /* --- Universal Styling ------------------------------ */
 
 h1 {
-    color: #fff;
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 40px;
-    margin: 0;
-  }
-  h2 {
-    color: #000;
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 20px;
-    margin: 6px 0;
-  }
-  
-  /* --- Header ----------------------------------------- */
-  
-  header {
-    background: linear-gradient(90deg, rgba(153,137,197,1) 0%, rgba(108,86,172,1) 35%, rgba(76,60,122,1) 100%);
-    padding: 6px 0;
-    text-align: center;
-  }
-  
-  /* --- Media Queries ---------------------------------- */
-  
-  @media screen and (max-width: 575px) {
-  
-  }
+  color: #fff;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 40px;
+  margin: 0;
+}
+h2 {
+  color: #000;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 18px;
+  margin: 6px 0;
+}
+.button {
+  background-color: #6c56ac;
+  border-color: #6c56ac;
+  color: #fff;
+}
+.button:hover {
+  background-color: #4c3c7a;
+  border-color: #4c3c7a;
+  color: #fff;
+}
+
+/* --- Header ----------------------------------------- */
+
+header {
+  background: linear-gradient(90deg, rgba(153,137,197,1) 0%, rgba(108,86,172,1) 35%, rgba(76,60,122,1) 100%);
+  padding: 6px 0;
+  text-align: center;
+}
+
+/* --- Content ---------------------------------------- */
+
+#cityList {
+  text-transform: capitalize;
+}
+#cityList .list-group-item, 
+#clearList .list-group-item {
+  cursor: pointer;
+}
+#cityList .list-group-item:hover, 
+#clearList .list-group-item:hover {
+  background-color: #4c3c7a;
+  border-color: #4c3c7a;
+  color: #fff;
+}
+#cityList .active {
+  background-color: #6c56ac;
+  border-color: #6c56ac;
+}
+#clearList {
+  margin: 20px 0;
+}
+
+/* --- Media Queries ---------------------------------- */
+
+@media screen and (max-width: 575px) {
+
+}
